@@ -1,1 +1,1 @@
-web: python create_superuser.py
+web: gunicorn taskmanager.wsgi
