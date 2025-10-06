@@ -42,6 +42,10 @@ INSTALLED_APPS = [
     "tasks",
     "rest_framework.authtoken"
 ]
+CSRF_TRUSTED_ORIGINS = [
+    "https://taskmanager-production-37b2.up.railway.app",
+]
+ALLOWED_HOSTS = ["taskmanager-production-37b2.up.railway.app", "127.0.0.1", "localhost"]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
