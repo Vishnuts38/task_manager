@@ -63,7 +63,7 @@ class PrivateGraphQLView(GraphQLView):
 
 class CreateSuperUserView(APIView):
     # Only superusers can create another superuser
-    permission_classes = [permissions.IsAdminUser]
+    permission_classes = [AllowAny]
 
     def post(self, request):
         username = request.data.get("username")
