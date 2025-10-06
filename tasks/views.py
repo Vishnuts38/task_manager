@@ -13,7 +13,10 @@ from graphene_django.views import GraphQLView
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.http import HttpResponseForbidden
-
+from django.contrib.auth import get_user_model
+from rest_framework import status, permissions
+from rest_framework.views import APIView
+User = get_user_model()
 
 class TaskViewSet(viewsets.ModelViewSet):
     serializer_class = TaskSerializer
@@ -56,3 +59,41 @@ class PrivateGraphQLView(GraphQLView):
         if not getattr(request, "user", None) or not request.user.is_authenticated:
             return HttpResponseForbidden("Authentication credentials were not provided.")
         return super().dispatch(request, *args, **kwargs)
+    
+
+class CreateSuperUserView(APIView):
+    # Only superusers can create another superuser
+    permission_classes = [permissions.IsAdminUser]
+
+    def post(self, request):
+        username = request.data.get("username")
+        email = request.data.get("email")
+        password = request.data.get("password")
+
+        if not username or not password:
+            return Response(
+                {"error": "Username and password are required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        if User.objects.filter(username=username).exists():
+            return Response(
+                {"error": "User already exists."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Create superuser
+        user = User.objects.create_superuser(
+            username=username,
+            email=email,
+            password=password
+        )
+
+        return Response(
+            {
+                "message": "Superuser created successfully.",
+                "username": user.username,
+                "email": user.email,
+            },
+            status=status.HTTP_201_CREATED,
+        )
