@@ -2,7 +2,7 @@
 from django.contrib import admin
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from tasks.views import TaskViewSet, CustomObtainAuthToken,PrivateGraphQLView,CreateSuperUserView
+from tasks.views import TaskViewSet, CustomObtainAuthToken,PrivateGraphQLView
 from django.views.decorators.csrf import csrf_exempt
 
 router = DefaultRouter()
@@ -13,6 +13,6 @@ urlpatterns = [
     path("api/token/", CustomObtainAuthToken.as_view(), name="api-token"),
     path("api/", include(router.urls)),
     path("graphql/", PrivateGraphQLView.as_view(graphiql=True)),  
-    path("create-superuser/", CreateSuperUserView.as_view(), name="create-superuser"),
+    # path("create-superuser/", CreateSuperUserView.as_view(), name="create-superuser"),
     
 ]

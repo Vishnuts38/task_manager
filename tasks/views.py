@@ -61,39 +61,39 @@ class PrivateGraphQLView(GraphQLView):
         return super().dispatch(request, *args, **kwargs)
     
 
-class CreateSuperUserView(APIView):
-    # Only superusers can create another superuser
-    permission_classes = [AllowAny]
+# class CreateSuperUserView(APIView):
+#     # Only superusers can create another superuser
+#     permission_classes = [AllowAny]
 
-    def post(self, request):
-        username = request.data.get("username")
-        email = request.data.get("email")
-        password = request.data.get("password")
+#     def post(self, request):
+#         username = request.data.get("username")
+#         email = request.data.get("email")
+#         password = request.data.get("password")
 
-        if not username or not password:
-            return Response(
-                {"error": "Username and password are required."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+#         if not username or not password:
+#             return Response(
+#                 {"error": "Username and password are required."},
+#                 status=status.HTTP_400_BAD_REQUEST,
+#             )
 
-        if User.objects.filter(username=username).exists():
-            return Response(
-                {"error": "User already exists."},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+#         if User.objects.filter(username=username).exists():
+#             return Response(
+#                 {"error": "User already exists."},
+#                 status=status.HTTP_400_BAD_REQUEST,
+#             )
 
-        # Create superuser
-        user = User.objects.create_superuser(
-            username=username,
-            email=email,
-            password=password
-        )
+#         # Create superuser
+#         user = User.objects.create_superuser(
+#             username=username,
+#             email=email,
+#             password=password
+#         )
 
-        return Response(
-            {
-                "message": "Superuser created successfully.",
-                "username": user.username,
-                "email": user.email,
-            },
-            status=status.HTTP_201_CREATED,
-        )
+#         return Response(
+#             {
+#                 "message": "Superuser created successfully.",
+#                 "username": user.username,
+#                 "email": user.email,
+#             },
+#             status=status.HTTP_201_CREATED,
+#         )
